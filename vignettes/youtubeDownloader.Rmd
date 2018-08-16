@@ -1,0 +1,95 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Downloading a list of videos
+```{r, eval=FALSE}
+# Sequence.Models
+url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+# the folder to save downloaded files
+folder = "/data/surfDrive/TutorialVideos/" 
+
+# #### download audio
+newFolder = videoListDownload(urlSeed = url0, path = folder, 
+                              saveFileList = TRUE, 
+                              sleepTime = 5, maxDownload = 200, 
+                              bothVideoAudio = TRUE)
+```
+
+# Downloading a list of audios
+```{r, eval=FALSE}
+url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+# #### Only download audio
+newFolder = videoListDownload(urlSeed = url0, path = folder, 
+                              saveFileList = TRUE, 
+                              sleepTime = 5, maxDownload = 200, 
+                              priority = c("audio only"), 
+                              bothVideoAudio = FALSE)
+```
+
+
+# Downloading one single audio
+```{r, eval=FALSE}
+url0 = "https://www.youtube.com/watch?v=J9NQFACZYEU&list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj&index=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"
+
+youTubeDownload(url0, path = paste0(folder, "music"),
+                saveFile = "videoFromYoutube", 
+                priority = "audio only", 
+                bothVideoAudio = FALSE)
+# .webm to .mp3 format
+tmp = audio2mp3(fileFormat = "webm", path = newFolder, 
+                removeSource = TRUE)
+```
+
+
+# Downloading one single video
+```{r, eval=FALSE}
+url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
+#### download video
+newFolder = videoListDownload(urlSeed = url0, path = folder, 
+                              saveFileList = TRUE, sleepTime = 10, 
+                              maxDownload = 200, priority = c("best"), 
+                              bothVideoAudio = TRUE)
+youTubeDownload(url0, path = "./OneVideo", 
+                saveFile = "videoFile",
+                priority = c("best", "mp4"))
+```
+
+
+# Downloading videos by table
+```{r, eval=FALSE}
+file = "fileNameOrders.csv"
+#### download video by fileNameOrders.csv table
+newFolder = videoListDownloadByTable(fileList = file, 
+                                     folderName = paste0(folder, "fileByTable"), 
+                                     bothVideoAudio = T, priority = c("best"), 
+                                     sleepTime = 10, id = c(1, 2, 5, 9))
+
+```
+
+
+# Transforming video format 
+```{r, eval=FALSE}
+# .webm to .mp4 format
+vidio2mp4(fileFormat = "webm", path = newFolder, removeSource = F)
+```
+
+
+# Transforming audio format 
+```{r, eval=FALSE}
+# .webm to .mp4 format
+audio2mp4(fileFormat = "webm", path = newFolder, removeSource = F)
+```
+
+# SessionInfo
+```{r}
+session_info()
+```
+
