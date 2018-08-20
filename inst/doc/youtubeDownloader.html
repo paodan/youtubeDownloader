@@ -199,6 +199,7 @@ newFolder =<span class="st"> </span><span class="kw">videoListDownload</span>(<s
 </div>
 <div id="downloading-a-list-of-audios" class="section level1">
 <h1><span class="header-section-number">3</span> Downloading a list of audios</h1>
+<p>Downloading audios is very slow. You can download videos then convert them to audios using <code>audio2mp3</code> function (see “.webm to .mp3 format” section).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">url0 =<span class="st"> &quot;https://www.youtube.com/watch?v=DejHQYAGb7Q&amp;list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6&quot;</span>
 <span class="co"># #### Only download audio</span>
 newFolder =<span class="st"> </span><span class="kw">videoListDownload</span>(<span class="dt">urlSeed =</span> url0, <span class="dt">path =</span> folder, 
@@ -214,10 +215,7 @@ newFolder =<span class="st"> </span><span class="kw">videoListDownload</span>(<s
 <span class="kw">youTubeDownload</span>(url0, <span class="dt">path =</span> <span class="kw">paste0</span>(folder, <span class="st">&quot;music&quot;</span>),
                 <span class="dt">saveFile =</span> <span class="st">&quot;videoFromYoutube&quot;</span>, 
                 <span class="dt">priority =</span> <span class="st">&quot;audio only&quot;</span>, 
-                <span class="dt">bothVideoAudio =</span> <span class="ot">FALSE</span>)
-<span class="co"># .webm to .mp3 format</span>
-tmp =<span class="st"> </span><span class="kw">audio2mp3</span>(<span class="dt">fileFormat =</span> <span class="st">&quot;webm&quot;</span>, <span class="dt">path =</span> newFolder, 
-                <span class="dt">removeSource =</span> <span class="ot">TRUE</span>)</code></pre></div>
+                <span class="dt">bothVideoAudio =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
 <div id="downloading-one-single-video" class="section level1">
 <h1><span class="header-section-number">5</span> Downloading one single video</h1>
@@ -231,7 +229,7 @@ tmp =<span class="st"> </span><span class="kw">audio2mp3</span>(<span class="dt"
 <h1><span class="header-section-number">6</span> Downloading videos by table</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">url0 =<span class="st"> &quot;https://www.youtube.com/watch?v=DejHQYAGb7Q&amp;list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6&quot;</span>
 <span class="co"># make a table of videos</span>
-vTable =<span class="st"> </span><span class="kw">videoListTable</span>(<span class="dt">urlSeed =</span> url0, <span class="dt">path =</span> <span class="st">&quot;~/&quot;</span>)
+vTable =<span class="st"> </span><span class="kw">videoListTable</span>(<span class="dt">urlSeed =</span> url0, <span class="dt">path =</span> folder)
 file =<span class="st"> </span><span class="kw">file.path</span>(vTable$folderName, <span class="st">&quot;fileNameOrders.csv&quot;</span>)
 <span class="co"># folderName = file.path(folder, &quot;fileByTable&quot;)</span>
 #### download video by fileNameOrders.csv table
@@ -251,13 +249,26 @@ newFolder =<span class="st"> </span><span class="kw">videoListDownloadByTable</s
 </div>
 <div id="converting-video-format" class="section level1">
 <h1><span class="header-section-number">7</span> Converting video format</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># .webm to .mp4 format</span>
+<p>Converting video format is very slow.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newFolder =<span class="st"> </span><span class="kw">videoListDownloadByTable</span>(<span class="dt">fileTable =</span> vTable$fileTable, 
+                                     <span class="dt">path =</span> vTable$folderName, 
+                                     <span class="dt">bothVideoAudio =</span> <span class="ot">TRUE</span>, 
+                                     <span class="dt">priority =</span> <span class="kw">c</span>(<span class="st">&quot;webm&quot;</span>), 
+                                     <span class="dt">sleepTime =</span> <span class="dv">10</span>, 
+                                     <span class="dt">id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+<span class="co"># .webm to .mp4 format</span>
 <span class="kw">video2mp4</span>(<span class="dt">fileFormat =</span> <span class="st">&quot;webm&quot;</span>, <span class="dt">path =</span> newFolder, 
           <span class="dt">removeSource =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
 <div id="converting-audio-format" class="section level1">
 <h1><span class="header-section-number">8</span> Converting audio format</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># .webm to .mp3 format</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newFolder =<span class="st"> </span><span class="kw">videoListDownloadByTable</span>(<span class="dt">fileTable =</span> vTable$fileTable, 
+                                     <span class="dt">path =</span> vTable$folderName, 
+                                     <span class="dt">bothVideoAudio =</span> <span class="ot">TRUE</span>, 
+                                     <span class="dt">priority =</span> <span class="kw">c</span>(<span class="st">&quot;webm&quot;</span>), 
+                                     <span class="dt">sleepTime =</span> <span class="dv">10</span>, 
+                                     <span class="dt">id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+<span class="co"># .webm to .mp3 format</span>
 <span class="kw">audio2mp3</span>(<span class="dt">fileFormat =</span> <span class="st">&quot;webm&quot;</span>, <span class="dt">path =</span> newFolder, 
           <span class="dt">removeSource =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
