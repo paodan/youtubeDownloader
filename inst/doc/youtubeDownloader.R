@@ -9,7 +9,7 @@ installDownloader()
 #  # Sequence.Models
 #  url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
 #  # the folder to save downloaded files
-#  folder = "/data/surfDrive/TutorialVideos/"
+#  folder = "~/YouTubeVideos/"
 #  
 #  # #### download audio
 #  newFolder = videoListDownload(urlSeed = url0, path = folder,
@@ -40,7 +40,7 @@ installDownloader()
 ## ---- eval=FALSE---------------------------------------------------------
 #  url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
 #  #### download video
-#  youTubeDownload(url0, path = "./OneVideo",
+#  youTubeDownload(url0, path = "~/YouTubeVideos/OneVideo",
 #                  saveFile = "videoFile",
 #                  priority = c("best", "mp4"))
 
@@ -57,7 +57,7 @@ installDownloader()
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  # .webm to .mp4 format
-#  vidio2mp4(fileFormat = "webm", path = newFolder,
+#  video2mp4(fileFormat = "webm", path = newFolder,
 #            removeSource = FALSE)
 
 ## ---- eval=FALSE---------------------------------------------------------

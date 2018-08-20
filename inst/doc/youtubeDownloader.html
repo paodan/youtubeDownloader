@@ -175,8 +175,9 @@ $(document).ready(function () {
 <p>According to the output of  function to install required softwares: youtube_dl and ffmpeg. The youtube_dl is a python package, which is used to trace the true video URL from YouTube. The ffmpeg software is to convert video/audio formats.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">installDownloader</span>()</code></pre></div>
 <pre><code>## 1. Install youtube-dl python package</code></pre>
-<pre><code>## Open terminal and run following command:</code></pre>
-<pre><code>## sudo pip install --upgrade youtube_dl</code></pre>
+<pre><code>## Open terminal and run following commands:</code></pre>
+<pre><code>## sudo apt install python-pip
+## sudo pip install --upgrade youtube_dl</code></pre>
 <pre><code>## 2. Install ffmpeg software to convert video format</code></pre>
 <pre><code>## Open terminal and run following commands:</code></pre>
 <pre><code>## sudo add-apt-repository ppa:mc3man/trusty-media
@@ -188,7 +189,7 @@ $(document).ready(function () {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sequence.Models</span>
 url0 =<span class="st"> &quot;https://www.youtube.com/watch?v=DejHQYAGb7Q&amp;list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6&quot;</span>
 <span class="co"># the folder to save downloaded files</span>
-folder =<span class="st"> &quot;/data/surfDrive/TutorialVideos/&quot;</span> 
+folder =<span class="st"> &quot;~/YouTubeVideos/&quot;</span> 
 
 <span class="co"># #### download audio</span>
 newFolder =<span class="st"> </span><span class="kw">videoListDownload</span>(<span class="dt">urlSeed =</span> url0, <span class="dt">path =</span> folder, 
@@ -222,7 +223,7 @@ tmp =<span class="st"> </span><span class="kw">audio2mp3</span>(<span class="dt"
 <h1><span class="header-section-number">5</span> Downloading one single video</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">url0 =<span class="st"> &quot;https://www.youtube.com/watch?v=pJON0-e_I3o&amp;t=889s&quot;</span>
 #### download video
-<span class="kw">youTubeDownload</span>(url0, <span class="dt">path =</span> <span class="st">&quot;./OneVideo&quot;</span>, 
+<span class="kw">youTubeDownload</span>(url0, <span class="dt">path =</span> <span class="st">&quot;~/YouTubeVideos/OneVideo&quot;</span>, 
                 <span class="dt">saveFile =</span> <span class="st">&quot;videoFile&quot;</span>,
                 <span class="dt">priority =</span> <span class="kw">c</span>(<span class="st">&quot;best&quot;</span>, <span class="st">&quot;mp4&quot;</span>))</code></pre></div>
 </div>
@@ -241,7 +242,7 @@ newFolder =<span class="st"> </span><span class="kw">videoListDownloadByTable</s
 <div id="converting-video-format" class="section level1">
 <h1><span class="header-section-number">7</span> Converting video format</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># .webm to .mp4 format</span>
-<span class="kw">vidio2mp4</span>(<span class="dt">fileFormat =</span> <span class="st">&quot;webm&quot;</span>, <span class="dt">path =</span> newFolder, 
+<span class="kw">video2mp4</span>(<span class="dt">fileFormat =</span> <span class="st">&quot;webm&quot;</span>, <span class="dt">path =</span> newFolder, 
           <span class="dt">removeSource =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
 <div id="converting-audio-format" class="section level1">
