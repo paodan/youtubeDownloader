@@ -229,15 +229,25 @@ tmp =<span class="st"> </span><span class="kw">audio2mp3</span>(<span class="dt"
 </div>
 <div id="downloading-videos-by-table" class="section level1">
 <h1><span class="header-section-number">6</span> Downloading videos by table</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file =<span class="st"> &quot;fileNameOrders.csv&quot;</span>
-folderName =<span class="st"> </span><span class="kw">paste0</span>(folder, <span class="st">&quot;fileByTable&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">url0 =<span class="st"> &quot;https://www.youtube.com/watch?v=DejHQYAGb7Q&amp;list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6&quot;</span>
+<span class="co"># make a table of videos</span>
+vTable =<span class="st"> </span><span class="kw">videoListTable</span>(<span class="dt">urlSeed =</span> url0, <span class="dt">path =</span> <span class="st">&quot;~/&quot;</span>)
+file =<span class="st"> </span><span class="kw">file.path</span>(vTable$folderName, <span class="st">&quot;fileNameOrders.csv&quot;</span>)
+<span class="co"># folderName = file.path(folder, &quot;fileByTable&quot;)</span>
 #### download video by fileNameOrders.csv table
 newFolder =<span class="st"> </span><span class="kw">videoListDownloadByTable</span>(<span class="dt">fileList =</span> file, 
-                                     <span class="dt">folderName =</span> folderName, 
+                                     <span class="dt">path =</span> vTable$folderName, 
                                      <span class="dt">bothVideoAudio =</span> <span class="ot">TRUE</span>, 
                                      <span class="dt">priority =</span> <span class="kw">c</span>(<span class="st">&quot;best&quot;</span>), 
                                      <span class="dt">sleepTime =</span> <span class="dv">10</span>, 
-                                     <span class="dt">id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">9</span>))</code></pre></div>
+                                     <span class="dt">id =</span> <span class="ot">NULL</span>)
+#### download video by a data.frame
+newFolder =<span class="st"> </span><span class="kw">videoListDownloadByTable</span>(<span class="dt">fileTable =</span> vTable$fileTable, 
+                                     <span class="dt">path =</span> vTable$folderName, 
+                                     <span class="dt">bothVideoAudio =</span> <span class="ot">TRUE</span>, 
+                                     <span class="dt">priority =</span> <span class="kw">c</span>(<span class="st">&quot;best&quot;</span>), 
+                                     <span class="dt">sleepTime =</span> <span class="dv">10</span>, 
+                                     <span class="dt">id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>))</code></pre></div>
 </div>
 <div id="converting-video-format" class="section level1">
 <h1><span class="header-section-number">7</span> Converting video format</h1>

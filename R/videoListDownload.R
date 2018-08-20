@@ -17,15 +17,14 @@
 #' look for mp4 file first, if this file does not exist, then the
 #' downloader will look for the best file marked by YouTube, then
 #' look for only audio file.
-#' @param id numeric or \code{NULL}, the index of rows of the `fileList`
-#' table to download. The default is \code{NULL}.
 #' @param sleepTime numeric, the time to pause to prevent YouTube blocking.
 #' The default is 10 second
+#' @param webmConvert either NULL (not convert), "mp4" or "mp3",
+#' convert webm file format to "mp4" or "mp3". The default is NULL.
 #' @import curl
 #' @importFrom limma strsplit2
-#' @rawNamespace import(urltools, except = url_parse)
+#' @import urltools
 #' @import stringr
-#' @import xml2
 #' @export
 #' @examples {
 #' \dontrun{
@@ -44,110 +43,64 @@
 #'                                saveFileList = TRUE,
 #'                                sleepTime = 5, maxDownload = 200,
 #'                                priority = c("audio only"),
-#'                                bothVideoAudio = FALSE)
+#'                                bothVideoAudio = FALSE,
+#'                                webmConvert = "mp3")
 #' }
 #' }
 
 ##### download a list of videos/audios if an URL seed provided (only for "Playlist" in YouTube)
 videoListDownload = function(urlSeed,
-                             path,
+                             path = "./",
                              saveFileList = TRUE,
                              sleepTime = 10,
                              maxDownload = 1000,
                              priority = c("audio only", "best", "mp4"),
                              bothVideoAudio = TRUE,
-                             webm2mp3 = FALSE) {
+                             webmConvert = NULL) {
   # copyright: Weiyang Tao 2017-11-02
-  urlpage = readLines(urlSeed, warn = FALSE)
-  ##### File names with orders
-  # the line containing titles
-  titleLine = grep("data-video-title=",
-                   urlpage,
-                   perl = FALSE,
-                   value = TRUE)
-  titleLine = gsub("&#39;", replacement = "\'", titleLine) # replace '
-  titleLine = gsub("&quot;", replacement = "", titleLine) # replace "
-  titleLine = gsub("\" ", replacement = "\"&", titleLine) # replace "
-  titleLine = gsub("&amp;", replacement = "and", titleLine) # replace &
+  # file list table
+  tableList = videoListTable(
+    urlSeed = urlSeed,
+    path = path,
+    saveFileList = saveFileList,
+    sleepTime = sleepTime,
+    maxDownload = maxDownload,
+    priority = priority,
+    bothVideoAudio = bothVideoAudio
+  )
+  orderTitle = tableList$fileTable
+  folderName = tableList$folderName
 
-  titles = param_get(titleLine, parameter_names = "data-video-title")
-  # orders
-  orders = param_get(titleLine, parameter_names = "data-index")
-  num = nrow(titles)
-  nameID = formatC(1:num, width = as.integer(log10(num) + 1), flag = "0")
-  tmp = sapply(1:num, function(ti) {
-    make.names(paste0(nameID[ti], titles[ti, 1], collapse = ""),
-               unique = FALSE,
-               allow_ = TRUE)
-  })
-  orderTitle = data.frame(
-    Orders = orders,
-    VideoTitles = titles,
-    fileName = tmp,
-    stringsAsFactors = FALSE
-  )
-  # the line containing ture url
-  id = grep(
-    "<a href=\"\\/watch\\?v=.*&amp;index",
-    urlpage,
-    perl = FALSE,
-    value = TRUE
-  )
-  if (length(id) == 0) {
-    fileConn <- file("wrongPage.html")
-    writeLines(urlpage, fileConn)
-    close(fileConn)
-    print(paste0("please go to ", getwd(), "/wrongPage.html"))
-    stop("loading page failed, please rerun")
-  } else {
-    id2 = strsplit2(id, "=")
-    v = strsplit2(id2[, 3], "\\&")[, 1] # v=
-    index = strsplit2(id2[, 4], "\\&")[, 1] # index=
-    list0 = param_get(urlSeed, parameter_names = "list") # list=
-    orderTitle$URL = paste0('https://www.youtube.com/watch?v=',
-                            v,
-                            "&list=",
-                            list0,
-                            "&index=",
-                            index) # generate url
-    foldID = grep(
-      paste0(
-        "\\/playlist\\?list=",
-        list0,
-        "\" class=\" yt-uix-sessionlink      spf-link "
-      ),
-      urlpage,
-      perl = TRUE,
-      value = TRUE
-    )
-    folderName = substr(foldID,
-                        regexpr("\" >", foldID) + 3,
-                        regexpr("<\\/a>", foldID) - 1)
-    folderName = file.path(path, make.names(folderName))
-    print(folderName)
-    if (!dir.exists(folderName))
-      dir.create(folderName, recursive = TRUE)
-    # save file name and URLs
-    if (saveFileList)
-      write.csv(orderTitle, paste0(folderName, "/fileNameOrders.csv"))
-    # download videos
+  # download videos
+  num = nrow(orderTitle)
+  if (num > maxDownload) {
+    message(num,
+            " files in total, only downloading ",
+            maxDownload,
+            " file(s).")
     num = min(num, maxDownload)
-    for (ui in 1:num) {
-      url_ui = orderTitle[ui, 4]
-      print(url_ui)
-      # file_ui = make.names(paste0(formatC(ui, width = as.integer(log10(num)+1), flag = "0"),
-      #                             orderTitle[ui, 2]), T, T)
-      file_ui = orderTitle[ui, 3]
-      youTubeDownload(
-        url = url_ui,
-        path = folderName,
-        saveFile = file_ui,
-        priority = priority,
-        bothVideoAudio = bothVideoAudio
-      )
-      Sys.sleep(abs(rnorm(1, sleepTime, 5)))
+  }
+  videoListDownloadByTable(
+    fileTable = orderTitle,
+    path = folderName,
+    bothVideoAudio = bothVideoAudio,
+    priority = priority,
+    id = 1:num,
+    sleepTime = sleepTime
+  )
+  # file format converting
+  if (!is.null(webmConvert)){
+    if (webmConvert == "mp3") {
+      audio2mp3(fileFormat = "webm",
+                path = folderName,
+                removeSource = FALSE)
+    } else if (webmConvert == "mp4") {
+      video2mp4(fileFormat = "webm",
+                path = folderName,
+                removeSource = FALSE)
+    } else{
+      warning("Unknown file format to convert.")
     }
-    print("All Done!")
   }
   return(folderName)
 }

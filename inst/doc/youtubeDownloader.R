@@ -45,15 +45,25 @@ installDownloader()
 #                  priority = c("best", "mp4"))
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  file = "fileNameOrders.csv"
-#  folderName = paste0(folder, "fileByTable")
+#  url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+#  # make a table of videos
+#  vTable = videoListTable(urlSeed = url0, path = "~/")
+#  file = file.path(vTable$folderName, "fileNameOrders.csv")
+#  # folderName = file.path(folder, "fileByTable")
 #  #### download video by fileNameOrders.csv table
 #  newFolder = videoListDownloadByTable(fileList = file,
-#                                       folderName = folderName,
+#                                       path = vTable$folderName,
 #                                       bothVideoAudio = TRUE,
 #                                       priority = c("best"),
 #                                       sleepTime = 10,
-#                                       id = c(1, 2, 5, 9))
+#                                       id = NULL)
+#  #### download video by a data.frame
+#  newFolder = videoListDownloadByTable(fileTable = vTable$fileTable,
+#                                       path = vTable$folderName,
+#                                       bothVideoAudio = TRUE,
+#                                       priority = c("best"),
+#                                       sleepTime = 10,
+#                                       id = c(1, 2, 5))
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  # .webm to .mp4 format

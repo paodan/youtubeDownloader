@@ -63,9 +63,6 @@ youTubeDownload(url0, path = paste0(folder, "music"),
                 saveFile = "videoFromYoutube", 
                 priority = "audio only", 
                 bothVideoAudio = FALSE)
-# .webm to .mp3 format
-tmp = audio2mp3(fileFormat = "webm", path = newFolder, 
-                removeSource = TRUE)
 ```
 
 
@@ -81,20 +78,36 @@ youTubeDownload(url0, path = "~/YouTubeVideos/OneVideo",
 
 # Downloading videos by table
 ```{r, eval=FALSE}
-file = "fileNameOrders.csv"
-folderName = paste0(folder, "fileByTable")
+url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+# make a table of videos
+vTable = videoListTable(urlSeed = url0, path = folder)
+file = file.path(vTable$folderName, "fileNameOrders.csv")
+# folderName = file.path(folder, "fileByTable")
 #### download video by fileNameOrders.csv table
 newFolder = videoListDownloadByTable(fileList = file, 
-                                     folderName = folderName, 
+                                     path = vTable$folderName, 
                                      bothVideoAudio = TRUE, 
                                      priority = c("best"), 
                                      sleepTime = 10, 
-                                     id = c(1, 2, 5, 9))
+                                     id = NULL)
+#### download video by a data.frame
+newFolder = videoListDownloadByTable(fileTable = vTable$fileTable, 
+                                     path = vTable$folderName, 
+                                     bothVideoAudio = TRUE, 
+                                     priority = c("best"), 
+                                     sleepTime = 10, 
+                                     id = c(1, 2, 5))
 ```
 
 
 # Converting video format 
 ```{r, eval=FALSE}
+newFolder = videoListDownloadByTable(fileTable = vTable$fileTable, 
+                                     path = vTable$folderName, 
+                                     bothVideoAudio = TRUE, 
+                                     priority = c("webm"), 
+                                     sleepTime = 10, 
+                                     id = c(1, 2))
 # .webm to .mp4 format
 video2mp4(fileFormat = "webm", path = newFolder, 
           removeSource = FALSE)

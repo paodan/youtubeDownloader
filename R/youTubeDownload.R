@@ -16,9 +16,7 @@
 #' is \code{TRUE}.
 #' @import curl
 #' @importFrom limma strsplit2
-#' @rawNamespace import(urltools, except = url_parse)
 #' @import stringr
-#' @import xml2
 #' @export
 #' @examples {
 #' \dontrun{
