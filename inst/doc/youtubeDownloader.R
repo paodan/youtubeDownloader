@@ -33,9 +33,6 @@ installDownloader()
 #                  saveFile = "videoFromYoutube",
 #                  priority = "audio only",
 #                  bothVideoAudio = FALSE)
-#  # .webm to .mp3 format
-#  tmp = audio2mp3(fileFormat = "webm", path = newFolder,
-#                  removeSource = TRUE)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
@@ -47,7 +44,7 @@ installDownloader()
 ## ---- eval=FALSE---------------------------------------------------------
 #  url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
 #  # make a table of videos
-#  vTable = videoListTable(urlSeed = url0, path = "~/")
+#  vTable = videoListTable(urlSeed = url0, path = folder)
 #  file = file.path(vTable$folderName, "fileNameOrders.csv")
 #  # folderName = file.path(folder, "fileByTable")
 #  #### download video by fileNameOrders.csv table
@@ -66,11 +63,23 @@ installDownloader()
 #                                       id = c(1, 2, 5))
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  newFolder = videoListDownloadByTable(fileTable = vTable$fileTable,
+#                                       path = vTable$folderName,
+#                                       bothVideoAudio = TRUE,
+#                                       priority = c("webm"),
+#                                       sleepTime = 10,
+#                                       id = c(1, 2))
 #  # .webm to .mp4 format
 #  video2mp4(fileFormat = "webm", path = newFolder,
 #            removeSource = FALSE)
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  newFolder = videoListDownloadByTable(fileTable = vTable$fileTable,
+#                                       path = vTable$folderName,
+#                                       bothVideoAudio = TRUE,
+#                                       priority = c("webm"),
+#                                       sleepTime = 10,
+#                                       id = c(1, 2))
 #  # .webm to .mp3 format
 #  audio2mp3(fileFormat = "webm", path = newFolder,
 #            removeSource = FALSE)
