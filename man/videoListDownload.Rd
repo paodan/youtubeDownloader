@@ -4,7 +4,7 @@
 \alias{videoListDownload}
 \title{Downloading by an URL seed}
 \usage{
-videoListDownload(urlSeed, path, saveFileList = T, sleepTime = 10,
+videoListDownload(urlSeed, path, saveFileList = TRUE, sleepTime = 10,
   maxDownload = 1000, priority = c("audio only", "best", "mp4"),
   bothVideoAudio = T, webm2mp3 = F)
 }
@@ -36,6 +36,28 @@ important information.}
 table to download. The default is \code{NULL}.}
 }
 \description{
-Download YouTube videos/audios by providing an URL seed, which is any
-URL in a video list.
+Download YouTube videos/audios by providing an URL seed,
+which is any URL in a video list.
+}
+\examples{
+{
+\dontrun{
+url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+# the folder to save downloaded files
+folder = "/data/surfDrive/TutorialVideos/"
+
+# #### download video
+newFolder = videoListDownload(urlSeed = url0, path = folder,
+                              saveFileList = TRUE,
+                              sleepTime = 5, maxDownload = 200,
+                              bothVideoAudio = TRUE)
+
+# #### download audio
+newFolder = videoListDownload(urlSeed = url0, path = folder,
+                               saveFileList = TRUE,
+                               sleepTime = 5, maxDownload = 200,
+                               priority = c("audio only"),
+                               bothVideoAudio = FALSE)
+}
+}
 }

@@ -1,13 +1,33 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Download videos/audios from YouTube by youtubeDownloader"
+author: "Weiyang Tao"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_document:
+    highlight: pygments
+    toc: true
+    number_sections: true
+    fig_width: 5
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Download videos/audios from YouTube}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+
+```{r, warning=FALSE}
+library(devtools)
+library(youtubeDownloader)
+```
+
+# Installing required softwares
+According to the output of \code{installDownloader} function to install required softwares: youtube_dl and ffmpeg.
+The youtube_dl is a python package, which is used to trace the true video URL from YouTube.
+The ffmpeg software is to convert video/audio formats.
+```{r}
+installDownloader()
+```
+
 
 # Downloading a list of videos
 ```{r, eval=FALSE}
@@ -53,10 +73,6 @@ tmp = audio2mp3(fileFormat = "webm", path = newFolder,
 ```{r, eval=FALSE}
 url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
 #### download video
-newFolder = videoListDownload(urlSeed = url0, path = folder, 
-                              saveFileList = TRUE, sleepTime = 10, 
-                              maxDownload = 200, priority = c("best"), 
-                              bothVideoAudio = TRUE)
 youTubeDownload(url0, path = "./OneVideo", 
                 saveFile = "videoFile",
                 priority = c("best", "mp4"))
@@ -66,26 +82,30 @@ youTubeDownload(url0, path = "./OneVideo",
 # Downloading videos by table
 ```{r, eval=FALSE}
 file = "fileNameOrders.csv"
+folderName = paste0(folder, "fileByTable")
 #### download video by fileNameOrders.csv table
 newFolder = videoListDownloadByTable(fileList = file, 
-                                     folderName = paste0(folder, "fileByTable"), 
-                                     bothVideoAudio = T, priority = c("best"), 
-                                     sleepTime = 10, id = c(1, 2, 5, 9))
-
+                                     folderName = folderName, 
+                                     bothVideoAudio = TRUE, 
+                                     priority = c("best"), 
+                                     sleepTime = 10, 
+                                     id = c(1, 2, 5, 9))
 ```
 
 
-# Transforming video format 
+# Converting video format 
 ```{r, eval=FALSE}
 # .webm to .mp4 format
-vidio2mp4(fileFormat = "webm", path = newFolder, removeSource = F)
+vidio2mp4(fileFormat = "webm", path = newFolder, 
+          removeSource = FALSE)
 ```
 
 
-# Transforming audio format 
+# Converting audio format 
 ```{r, eval=FALSE}
-# .webm to .mp4 format
-audio2mp4(fileFormat = "webm", path = newFolder, removeSource = F)
+# .webm to .mp3 format
+audio2mp3(fileFormat = "webm", path = newFolder, 
+          removeSource = FALSE)
 ```
 
 # SessionInfo

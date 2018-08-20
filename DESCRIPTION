@@ -1,6 +1,6 @@
 Package: youtubeDownloader
 Title: Download YouTube videos and audios
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: person("Weiyang", "Tao", email = "w.tao@umcutrecht.nl", role = c("aut", "cre"))
 Description: Download YouTube videos and audios.
 Depends: R (>= 3.4.0)

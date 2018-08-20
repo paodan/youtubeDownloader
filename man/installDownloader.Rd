@@ -9,3 +9,10 @@ installDownloader()
 \description{
 Install downloader
 }
+\examples{
+{
+\dontrun{
+installDownloader()
+}
+}
+}

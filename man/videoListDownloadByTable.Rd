@@ -2,7 +2,7 @@
 % Please edit documentation in R/videoListDownloadByTable.R
 \name{videoListDownloadByTable}
 \alias{videoListDownloadByTable}
-\title{Download YouTube videos/audios by providing a table of list.}
+\title{Download YouTube videos/audios by providing a table of video/audio list.}
 \usage{
 videoListDownloadByTable(fileList, path, bothVideoAudio = TRUE,
   priority = c("mp4", "best", "audio only"), id = NULL,
@@ -36,5 +36,20 @@ table to download. The default is \code{NULL}.}
 The default is 10 second}
 }
 \description{
-Download YouTube videos/audios by providing a table of list.
+Download YouTube videos/audios by providing a table of video/audio list.
+}
+\examples{
+{
+\dontrun{
+file = "fileNameOrders.csv"
+folderName = "./fileByTable"
+#### download video by fileNameOrders.csv table
+newFolder = videoListDownloadByTable(fileList = file,
+                                     folderName = folderName,
+                                     bothVideoAudio = TRUE,
+                                     priority = c("best"),
+                                     sleepTime = 10,
+                                     id = c(1, 2, 5, 9))
+}
+}
 }

@@ -2,9 +2,17 @@ Package: youtubeDownloader
 Title: Download YouTube videos and audios
 Version: 0.0.0.9000
 Authors@R: person("Weiyang", "Tao", email = "w.tao@umcutrecht.nl", role = c("aut", "cre"))
-Description: Download YouTube videos and audios
+Description: Download YouTube videos and audios.
 Depends: R (>= 3.4.0)
-License: What license is it under?
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.0
+Imports: limma,
+    xml2,
+    stringr,
+    urltools,
+    curl
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

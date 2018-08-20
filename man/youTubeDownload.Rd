@@ -31,3 +31,21 @@ is \code{TRUE}.}
 \description{
 Download one single video/audio
 }
+\examples{
+{
+\dontrun{
+# Downlad an audio
+url0 = "https://www.youtube.com/watch?v=J9NQFACZYEU&list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj&index=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"
+youTubeDownload(url0, path = "./music",
+                saveFile = "videoFromYoutube",
+                priority = "audio only",
+                bothVideoAudio = FALSE)
+
+# Downlad a video
+url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
+youTubeDownload(url0, path = "./OneVideo",
+                saveFile = "videoFile",
+                priority = c("best", "mp4"))
+}
+}
+}

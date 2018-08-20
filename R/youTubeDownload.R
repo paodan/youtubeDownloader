@@ -16,15 +16,33 @@
 #' is \code{TRUE}.
 #' @import curl
 #' @importFrom limma strsplit2
-#' @import urltools
+#' @rawNamespace import(urltools, except = url_parse)
 #' @import stringr
 #' @import xml2
 #' @export
+#' @examples {
+#' \dontrun{
+#' # Downlad an audio
+#' url0 = "https://www.youtube.com/watch?v=J9NQFACZYEU&list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj&index=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"
+#' youTubeDownload(url0, path = "./music",
+#'                 saveFile = "videoFromYoutube",
+#'                 priority = "audio only",
+#'                 bothVideoAudio = FALSE)
+#'
+#' # Downlad a video
+#' url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
+#' youTubeDownload(url0, path = "./OneVideo",
+#'                 saveFile = "videoFile",
+#'                 priority = c("best", "mp4"))
+#' }
+#' }
 
 ##### download a video/audio if an URL provided
-youTubeDownload = function(url, path = getwd(), saveFile = "videoFromYoutube",
+youTubeDownload = function(url,
+                           path = getwd(),
+                           saveFile = "videoFromYoutube",
                            priority = c("mp4", "best", "audio only"),
-                           bothVideoAudio = TRUE){
+                           bothVideoAudio = TRUE) {
   # Author: Weiyang Tao 2017-11-02
   # download Videos by using youtube-dl
   # please install youtube-dl first in shell
@@ -32,24 +50,28 @@ youTubeDownload = function(url, path = getwd(), saveFile = "videoFromYoutube",
   # bothVideoAudio should be FALSE if only downloading audio/video
 
   checkURL = paste0("youtube-dl --list-formats ", url)
-  x = system(checkURL, intern = T)
-  if (bothVideoAudio) x = x[-grep("only", x)] # remove only video or noly audio
+  x = system(checkURL, intern = TRUE)
+  if (bothVideoAudio)
+    x = x[-grep("only", x)] # remove only video or noly audio
 
-  for (mi in priority){
-    if (mi != "best") {mi = paste0(" ", mi, " ")}
-    text = grep(mi, x, value = T)
-    if (length(text > 0)){
+  for (mi in priority) {
+    if (mi != "best") {
+      mi = paste0(" ", mi, " ")
+    }
+    text = grep(mi, x, value = TRUE)
+    if (length(text > 0)) {
       textAll = strsplit2(text, " ")
-      text0 = t(apply(textAll, 1, function(x) x[x != ""][1:7]))
-      if (mi == " audio only "){
+      text0 = t(apply(textAll, 1, function(x)
+        x[x != ""][1:7]))
+      if (mi == " audio only ") {
         # find the audeo with the best quality
-        highestResIndx = order(as.integer(strsplit2(text0[,7], "k")[,1]), decreasing = T)[1]
+        highestResIndx = order(as.integer(strsplit2(text0[, 7], "k")[, 1]), decreasing = T)[1]
       } else {
         # find the video with the best resolution
-        highestResIndx = order(as.integer(strsplit2(text0[,3], "x")[,1]), decreasing = T)[1]
+        highestResIndx = order(as.integer(strsplit2(text0[, 3], "x")[, 1]), decreasing = T)[1]
       }
       # best video ID
-      id = text0[highestResIndx,1]
+      id = text0[highestResIndx, 1]
       # best video format
       fileType = paste0(".", text0[highestResIndx, 2])
       break
@@ -57,7 +79,7 @@ youTubeDownload = function(url, path = getwd(), saveFile = "videoFromYoutube",
   }
   # find real URL
   findURL = paste0("youtube-dl -f ", id, " -g ", url)[1]
-  videoURL = system(findURL, intern = T)
+  videoURL = system(findURL, intern = TRUE)
   outFile = paste0(file.path(path, saveFile), fileType)
   # download video
   # system(paste0('wget ', '"', videoURL, '" -q -O ', outFile), intern = T)

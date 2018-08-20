@@ -2,7 +2,7 @@
 % Please edit documentation in R/audio2mp3.R
 \name{audio2mp3}
 \alias{audio2mp3}
-\title{Transform other audio format to .mp3}
+\title{Converting other audio format to .mp3}
 \usage{
 audio2mp3(fileFormat = "webm", path, removeSource = FALSE)
 }
@@ -13,8 +13,28 @@ The default is "webm".}
 \item{path}{character, the path where the files located.}
 
 \item{removeSource}{logic, removing the original audio file after
-transformation.}
+converting.}
 }
 \description{
-Transform other audio format to .mp3
+Converting other audio format to .mp3
+}
+\examples{
+{
+\dontrun{
+url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+# the folder to save downloaded files
+folder = "/data/surfDrive/TutorialVideos/"
+
+# audio folder
+newFolder = videoListDownload(urlSeed = url0, path = folder,
+                               saveFileList = TRUE,
+                               sleepTime = 5, maxDownload = 200,
+                               priority = c("audio only"),
+                               bothVideoAudio = FALSE)
+
+# Converting
+vidio2mp3(fileFormat = "webm", path = newFolder,
+          removeSource = FALSE)
+}
+}
 }

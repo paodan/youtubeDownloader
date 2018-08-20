@@ -2,7 +2,7 @@
 % Please edit documentation in R/audio2mp4.R
 \name{video2mp4}
 \alias{video2mp4}
-\title{Transform other video format to .mp4}
+\title{Converting other video format to .mp4}
 \usage{
 video2mp4(fileFormat = "webm", path, removeSource = FALSE)
 }
@@ -13,8 +13,26 @@ The default is "webm".}
 \item{path}{character, the path where the files located.}
 
 \item{removeSource}{logic, removing the original video file after
-transformation.}
+converting.}
 }
 \description{
-Transform other video format to .mp4
+Converting other video format to .mp4
+}
+\examples{
+{
+\dontrun{
+url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
+# the folder to save downloaded files
+folder = "/data/surfDrive/TutorialVideos/"
+
+# Video folder
+newFolder = videoListDownload(urlSeed = url0, path = folder,
+                              saveFileList = TRUE,
+                              sleepTime = 5, maxDownload = 200,
+                              bothVideoAudio = TRUE)
+# Converting
+vidio2mp4(fileFormat = "webm", path = newFolder,
+          removeSource = FALSE)
+}
+}
 }
