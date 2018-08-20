@@ -44,6 +44,7 @@ newFolder = videoListDownload(urlSeed = url0, path = folder,
 ```
 
 # Downloading a list of audios
+Downloading audios is very slow. You can download videos then convert them to audios using `audio2mp3` function (see ".webm to .mp3 format" section).
 ```{r, eval=FALSE}
 url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
 # #### Only download audio
@@ -101,6 +102,7 @@ newFolder = videoListDownloadByTable(fileTable = vTable$fileTable,
 
 
 # Converting video format 
+Converting video format is very slow.
 ```{r, eval=FALSE}
 newFolder = videoListDownloadByTable(fileTable = vTable$fileTable, 
                                      path = vTable$folderName, 
@@ -116,6 +118,12 @@ video2mp4(fileFormat = "webm", path = newFolder,
 
 # Converting audio format 
 ```{r, eval=FALSE}
+newFolder = videoListDownloadByTable(fileTable = vTable$fileTable, 
+                                     path = vTable$folderName, 
+                                     bothVideoAudio = TRUE, 
+                                     priority = c("webm"), 
+                                     sleepTime = 10, 
+                                     id = c(1, 2))
 # .webm to .mp3 format
 audio2mp3(fileFormat = "webm", path = newFolder, 
           removeSource = FALSE)
