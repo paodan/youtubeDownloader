@@ -49,6 +49,9 @@ youTubeDownload = function(url,
   # sudo pip install --upgrade youtube_dl
   # bothVideoAudio should be FALSE if only downloading audio/video
 
+  if(!file.exists(path))
+    dir.create(path, recursive = TRUE)
+
   checkURL = paste0("youtube-dl --list-formats ", url)
   x = system(checkURL, intern = TRUE)
   if (bothVideoAudio)
