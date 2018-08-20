@@ -55,15 +55,15 @@ videoListDownload = function(urlSeed,
                              sleepTime = 10,
                              maxDownload = 1000,
                              priority = c("audio only", "best", "mp4"),
-                             bothVideoAudio = T,
-                             webm2mp3 = F) {
+                             bothVideoAudio = TRUE,
+                             webm2mp3 = FALSE) {
   # copyright: Weiyang Tao 2017-11-02
   urlpage = readLines(urlSeed, warn = FALSE)
   ##### File names with orders
   # the line containing titles
   titleLine = grep("data-video-title=",
                    urlpage,
-                   perl = F,
+                   perl = FALSE,
                    value = TRUE)
   titleLine = gsub("&#39;", replacement = "\'", titleLine) # replace '
   titleLine = gsub("&quot;", replacement = "", titleLine) # replace "
@@ -77,8 +77,8 @@ videoListDownload = function(urlSeed,
   nameID = formatC(1:num, width = as.integer(log10(num) + 1), flag = "0")
   tmp = sapply(1:num, function(ti) {
     make.names(paste0(nameID[ti], titles[ti, 1], collapse = ""),
-               unique = F,
-               allow_ = T)
+               unique = FALSE,
+               allow_ = TRUE)
   })
   orderTitle = data.frame(
     Orders = orders,

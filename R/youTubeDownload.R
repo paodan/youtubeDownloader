@@ -86,6 +86,7 @@ youTubeDownload = function(url,
   outFile = paste0(file.path(path, saveFile), fileType)
   # download video
   # system(paste0('wget ', '"', videoURL, '" -q -O ', outFile), intern = T)
-  curl_download(videoURL, outFile)
+  # curl_download(videoURL, outFile)
+  download.file(videoURL, outFile)
   cat("Done: ", outFile, "\n", paste0(rep("-", 50), collapse = ""), "\n")
 }
