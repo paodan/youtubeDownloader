@@ -126,7 +126,7 @@ videoListDownload = function(urlSeed,
     folderName = file.path(path, make.names(folderName))
     print(folderName)
     if (!dir.exists(folderName))
-      dir.create(folderName)
+      dir.create(folderName, recursive = TRUE)
     # save file name and URLs
     if (saveFileList)
       write.csv(orderTitle, paste0(folderName, "/fileNameOrders.csv"))

@@ -49,7 +49,7 @@ videoListDownloadByTable = function(fileList,
   print(path)
   fileName = fileList
   if (!dir.exists(path))
-    dir.create(path)
+    dir.create(path, recursive = TRUE)
   # save file name and URLs
   orderTitle = read.csv(fileName, header = TRUE, row.names = 1)
 
