@@ -8,7 +8,7 @@ bilibiliConcat = function(fileFormat = "flv",
                           path = './',
                           removeSource = FALSE){
 
-  listFile = normalizePath(paste0(path, "/videoList.txt"))
+  listFile = paste0(normalizePath(path), "/videoList.txt")
   output = paste0(path, "/../", basename(normalizePath(path)), ".", fileFormat)
   write.table(paste0("file '", dir(path, pattern = paste0("*\\.", fileFormat, "$"), full.names = F), "'"),
               file = listFile, quote = F, row.names = F, col.names = F)
@@ -28,7 +28,7 @@ bilibiliConcat = function(fileFormat = "flv",
 
 
 #' @import digest
-get_play_list = function(url, cid, quality){
+get_play_list = function(start_url, cid, quality){
   # start_url = paste0('https://api.bilibili.com/x/web-interface/view?aid=',
   #                    str_match(start, '/av([0-9]+)/*' )[1,2])
 
@@ -38,7 +38,7 @@ get_play_list = function(url, cid, quality){
   tmp = strsplit(rawToChar(tmp[length(tmp):1]), ":")[[1]]
 
   appkey = tmp[1]
-  sec = rev(tmp[2])
+  sec = tmp[2]
   params = sprintf('appkey=%s&cid=%s&otype=json&qn=%s&quality=%s&type=',  appkey, cid, quality, quality)
 
   chksum = digest::digest(paste0(params, sec), "md5", serialize=FALSE, raw=F)
@@ -65,7 +65,7 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
   currentVideoPath = paste0(path, "/", title)
   for (i in video_list){
     if(!dir.exists(currentVideoPath))
-      dir.create(currentVideoPath)
+      dir.create(currentVideoPath, recursive = TRUE)
 
     headers = c(
       # ('Host', 'upos-hz-mirrorks3.acgvideo.com'),  #注意修改host,不用也行
@@ -82,7 +82,7 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
     num = num+1
   }
   # concatenate video files to their parent folder
-  bilibiliConcat(path = path, removeSource = removeSource)
+  tmp = bilibiliConcat(path = currentVideoPath, removeSource = removeSource)
   return(paste0(currentVideoPath, ".flv"))
 }
 
@@ -127,7 +127,7 @@ bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809
   video_title = gsub('[/\\?<>\\:*|": ]', "_", data[["title"]])
   cid_list = list()
 
-  if (!is.null(grep('?p=', urlSeed))){
+  if (length(grep('?p=', urlSeed)) > 0){
     # 单独下载分P视频中的一集
     p = str_match(urlSeed,  '\\?p=([0-9]+)')[1,2]
     cid_list = c(cid_list, list(data[['pages']][[as.integer(p)]]))
@@ -147,8 +147,8 @@ bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809
     start_url = paste0(start_url,  "/?p=", page)
 
     video_list = get_play_list(start_url, cid, quality)
-    start_time = time.time()
-    down_video(video_list, title, start_url, page, path, removeSource)
+    down_file = down_video(video_list, title, start_url, page, path, removeSource)
+    print(down_file)
   }
 }
 
