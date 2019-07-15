@@ -1,5 +1,5 @@
 ---
-title: "Download videos/audios from YouTube by youtubeDownloader"
+title: "Download videos/audios from YouTube/Bilibili by youtubeDownloader"
 author: "Weiyang Tao"
 date: "`r Sys.Date()`"
 output: 
@@ -22,7 +22,7 @@ library(youtubeDownloader)
 
 # Installing required softwares
 According to the output of \code{installDownloader} function to install required softwares: youtube_dl and ffmpeg.
-The youtube_dl is a python package, which is used to trace the true video URL from YouTube.
+The youtube_dl is a python package, which is used to trace the true video URL from YouTube/Bilibili.
 The ffmpeg software is to convert video/audio formats.
 ```{r}
 installDownloader()
@@ -30,17 +30,32 @@ installDownloader()
 
 
 # Downloading a list of videos
+## Youtube
 ```{r, eval=FALSE}
 # Sequence.Models
 url0 = "https://www.youtube.com/watch?v=DejHQYAGb7Q&list=PLkDaE6sCZn6F6wUI9tvS_Gw1vaFAx6rd6"
 # the folder to save downloaded files
 folder = "~/YouTubeVideos/" 
 
-# #### download audio
+# #### download video
 newFolder = videoListDownload(urlSeed = url0, path = folder, 
                               saveFileList = TRUE, 
                               sleepTime = 5, maxDownload = 200, 
                               bothVideoAudio = TRUE)
+```
+
+## Bilibili
+```{r, eval=FALSE}
+# Sequence.Models
+url0 = "https://www.bilibili.com/video/av30300809"
+# the folder to save downloaded files
+folder = "~/python_data_analysis_and_machine_learning/" 
+
+# #### download video
+bilibiliDownload(urlSeed = url0,
+                 quality = 32,
+                 path = folder,
+                 removeSource = TRUE)
 ```
 
 # Downloading a list of audios
@@ -68,6 +83,8 @@ youTubeDownload(url0, path = paste0(folder, "music"),
 
 
 # Downloading one single video
+
+## Youtube
 ```{r, eval=FALSE}
 url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
 #### download video
@@ -76,6 +93,19 @@ youTubeDownload(url0, path = "~/YouTubeVideos/OneVideo",
                 priority = c("best", "mp4"))
 ```
 
+## Bilibili
+```{r, eval=FALSE}
+# Sequence.Models
+url0 = "https://www.bilibili.com/video/av30300809/?p=3"
+# the folder to save downloaded files
+folder = "~/python_data_analysis_and_machine_learning/" 
+
+# #### download video
+bilibiliDownload(urlSeed = url0,
+                 quality = 32,
+                 path = folder,
+                 removeSource = FALSE)
+```
 
 # Downloading videos by table
 ```{r, eval=FALSE}

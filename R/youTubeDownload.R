@@ -39,7 +39,7 @@
 youTubeDownload = function(url,
                            path = getwd(),
                            saveFile = "videoFromYoutube",
-                           priority = c("mp4", "best", "audio only"),
+                           priority = c("flv"),
                            bothVideoAudio = TRUE) {
   # Author: Weiyang Tao 2017-11-02
   # download Videos by using youtube-dl
