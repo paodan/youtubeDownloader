@@ -107,7 +107,7 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
 #' }
 bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809/?p=40",
                             quality = c(p720p = 64, p360p=16, p480p = 32, p1080p = 80)[1],
-                            path = "./bilibili_video/", removeSource = FALSE){
+                            path = "./bilibili_video/", removeSource = FALSE, sleepTime = 5){
   if (is.numeric(urlSeed)){  # 如果输入的是av号
     # 获取cid的api, 传入aid即可
     start_url = paste0('https://api.bilibili.com/x/web-interface/view?aid=', urlSeed)
@@ -149,6 +149,7 @@ bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809
     video_list = get_play_list(start_url, cid, quality)
     down_file = down_video(video_list, title, start_url, page, path, removeSource)
     print(down_file)
+    Sys.sleep(abs(rnorm(1, sleepTime, 5)))
   }
 }
 
