@@ -9,7 +9,8 @@ bilibiliDownload(
   quality = c(p720p = 64, p360p = 16, p480p = 32, p1080p = 80)[1],
   path = "./bilibili_video/",
   removeSource = FALSE,
-  sleepTime = 5
+  sleepTime = 5,
+  method
 )
 }
 \arguments{

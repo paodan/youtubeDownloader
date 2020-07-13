@@ -61,7 +61,8 @@ get_play_list = function(start_url, cid, quality){
 
 
 # Download video
-down_video = function(video_list, title, start_url, page, path, removeSource){
+down_video = function(video_list, title, start_url, page, path,
+                      removeSource, method){
   num = 1
   cat(paste0('[正在下载P', page, '段视频,请稍等...]:'), title, "\n")
   currentVideoPath = paste0(path, "/", title)
@@ -80,7 +81,7 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
       'Origin'='https://www.bilibili.com',
       'Connection'= 'keep-alive')
     download.file(url = i, destfile = paste0(currentVideoPath, "/", num, ".flv"),
-                  headers =  headers)
+                  method = method, headers =  headers)
     num = num+1
   }
   # concatenate video files to their parent folder
@@ -116,7 +117,8 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
 #' }
 bilibiliDownload = function(urlSeed = urlSeed,
                             quality = c(p720p = 64, p360p=16, p480p = 32, p1080p = 80)[1],
-                            path = "./bilibili_video/", removeSource = FALSE, sleepTime = 5){
+                            path = "./bilibili_video/", removeSource = FALSE,
+                            sleepTime = 5, method){
   # old api (aid)
   # api = 'https://api.bilibili.com/x/web-interface/view?aid='
 
@@ -173,7 +175,8 @@ bilibiliDownload = function(urlSeed = urlSeed,
     start_url = paste0(start_url,  "/?p=", page)
 
     video_list = get_play_list(start_url, cid, quality)
-    down_file = down_video(video_list, title, start_url, page, path, removeSource)
+    down_file = down_video(video_list, title, start_url, page, path,
+                           removeSource, method)
     print(down_file)
     Sys.sleep(abs(rnorm(1, sleepTime, 5)))
   }
