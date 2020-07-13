@@ -4,8 +4,13 @@
 \alias{youTubeDownload}
 \title{Download one single video/audio}
 \usage{
-youTubeDownload(url, path = getwd(), saveFile = "videoFromYoutube",
-  priority = c("flv"), bothVideoAudio = TRUE)
+youTubeDownload(
+  url,
+  path = getwd(),
+  saveFile = "videoFromYoutube",
+  priority = c("flv"),
+  bothVideoAudio = TRUE
+)
 }
 \arguments{
 \item{url}{the YouTube url to download the video/audio file.}

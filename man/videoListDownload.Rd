@@ -4,9 +4,16 @@
 \alias{videoListDownload}
 \title{Downloading by an URL seed}
 \usage{
-videoListDownload(urlSeed, path = "./", saveFileList = TRUE,
-  sleepTime = 10, maxDownload = 1000, priority = c("audio only",
-  "best", "mp4"), bothVideoAudio = TRUE, webmConvert = NULL)
+videoListDownload(
+  urlSeed,
+  path = "./",
+  saveFileList = TRUE,
+  sleepTime = 10,
+  maxDownload = 1000,
+  priority = c("audio only", "best", "mp4"),
+  bothVideoAudio = TRUE,
+  webmConvert = NULL
+)
 }
 \arguments{
 \item{path}{the path to save video/audio files.}

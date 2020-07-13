@@ -4,9 +4,15 @@
 \alias{videoListDownloadByTable}
 \title{Download YouTube videos/audios by providing a table of video/audio list.}
 \usage{
-videoListDownloadByTable(fileList, fileTable = NULL, path,
-  bothVideoAudio = TRUE, priority = c("mp4", "best", "audio only"),
-  id = NULL, sleepTime = 10)
+videoListDownloadByTable(
+  fileList,
+  fileTable = NULL,
+  path,
+  bothVideoAudio = TRUE,
+  priority = c("mp4", "best", "audio only"),
+  id = NULL,
+  sleepTime = 10
+)
 }
 \arguments{
 \item{fileList}{the file name of video/audio list table. This table

@@ -4,9 +4,12 @@
 \alias{bilibiliListTable}
 \title{Downloading by an URL seed}
 \usage{
-
-  bilibiliListTable(urlSeed = "https://www.bilibili.com/video/av29663946/?p=2",
-  path = "./bilibili_video/", saveFileList = TRUE, addOrder = FALSE)
+bilibiliListTable(
+  urlSeed,
+  path = "./bilibili_video/",
+  saveFileList = TRUE,
+  addOrder = FALSE
+)
 }
 \arguments{
 \item{path}{the path to save video/audio files.}
@@ -28,10 +31,11 @@ which is any URL in a video list.
 \examples{
 {
 \dontrun{
-bilibiliListTable("https://www.bilibili.com/video/av30300809/?p=40")
+urlSeed = "https://www.bilibili.com/video/BV1kb411x7KZ"
+bilibiliListTable(urlSeed)
 
-bilibiliListTable(urlSeed = "https://www.bilibili.com/video/av30300809",
-                  path = "./python数据分析与机器学习",
+bilibiliListTable(urlSeed = urlSeed,
+                  path = "./小学二年级数学上册【杨老师54讲】",
                   addOrder = TRUE)
 
 }

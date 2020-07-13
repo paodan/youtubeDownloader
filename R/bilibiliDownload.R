@@ -1,4 +1,3 @@
-
 #' Concatenates videos from Bilibili
 #' @param fileFormat the format of videos to concatenate, the default is "flv".
 #' @param path the path of videos located, the default is current directory.
@@ -32,6 +31,8 @@ get_play_list = function(start_url, cid, quality){
   # start_url = paste0('https://api.bilibili.com/x/web-interface/view?aid=',
   #                    str_match(start, '/av([0-9]+)/*' )[1,2])
 
+  api = 'https://interface.bilibili.com/v2/playurl'
+
   entropy = 'rbMCKn@KuamXWlPMoJGsKcbiJKUfkPF_8dABscJntvqhRSETg'
   tmp = (utf8ToInt(entropy)+2)
   mode(tmp) = "raw"
@@ -39,11 +40,12 @@ get_play_list = function(start_url, cid, quality){
 
   appkey = tmp[1]
   sec = tmp[2]
-  params = sprintf('appkey=%s&cid=%s&otype=json&qn=%s&quality=%s&type=',  appkey, cid, quality, quality)
+  params = sprintf('appkey=%s&cid=%s&otype=json&qn=%s&quality=%s&type=',
+                   appkey, cid, quality, quality)
 
   chksum = digest::digest(paste0(params, sec), "md5", serialize=FALSE, raw=F)
 
-  url_api = sprintf('https://interface.bilibili.com/v2/playurl?%s&sign=%s', params, chksum)
+  url_api = sprintf('%s?%s&sign=%s', api, params, chksum)
   headers = c(
     'Referer'= start_url,  # 注意加上referer
     'User-Agent'= 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
@@ -87,6 +89,11 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
 }
 
 #' Download (a list of ) Bilibili videos by providing a url seed.
+#'
+#' Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \br
+#' The API to get AV ID by BV ID:
+#' https://api.bilibili.com/x/web-interface/view?bvid=BVID
+#'
 #' @param urlSeed a url string.
 #' @param quality the quality of the video(s), 64 (default) is 720p, 16 is 360p, 32 is 480p, 80 is 1080p.
 #' @param path the path to save the list of videos.
@@ -95,27 +102,45 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
 #' @examples {
 #' \dontrun{
 #' # Download a single video if there is "/?p=num" in the urlSeed.
-#' bilibiliDownload("https://www.bilibili.com/video/av30300809/?p=40")
+#' urlSeed = "https://www.bilibili.com/video/BV1kb411x7KZ?p=1"
+#' bilibiliDownload(urlSeed)
 #'
-#' # Download a list of videos if there is no "/?p=num" in the urlSeed.
-#' bilibiliDownload(urlSeed = "https://www.bilibili.com/video/av30300809",
+#' # Download a list of videos if there is no "/]?p=num" in the urlSeed.
+#' urlSeed = "https://www.bilibili.com/video/BV1kb411x7KZ"
+#' bilibiliDownload(urlSeed = urlSeed,
 #'                  quality = 32,
-#'                  path = "./python数据分析与机器学习",
+#'                  path = "./小学二年级数学上册【杨老师54讲】",
 #'                  removeSource = TRUE)
 #'
 #' }
 #' }
-bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809/?p=40",
+bilibiliDownload = function(urlSeed = urlSeed,
                             quality = c(p720p = 64, p360p=16, p480p = 32, p1080p = 80)[1],
                             path = "./bilibili_video/", removeSource = FALSE, sleepTime = 5){
-  if (is.numeric(urlSeed)){  # 如果输入的是av号
-    # 获取cid的api, 传入aid即可
-    start_url = paste0('https://api.bilibili.com/x/web-interface/view?aid=', urlSeed)
-  } else{
-    # https://www.bilibili.com/video/av46958874/?spm_id_from=333.334.b_63686965665f7265636f6d6d656e64.16
-    start_url = paste0('https://api.bilibili.com/x/web-interface/view?aid=',
-                       str_match(urlSeed, '/av([0-9]+)/*')[1,2])
+  # old api (aid)
+  # api = 'https://api.bilibili.com/x/web-interface/view?aid='
+
+  # new api (bid)
+  api = "https://api.bilibili.com/x/web-interface/view?bvid="
+  # if (is.numeric(urlSeed)){  # 如果输入的是av号
+  #   # 获取cid的api, 传入aid即可
+  #   start_url = paste0(api, urlSeed)
+  # } else{
+  # https://www.bilibili.com/video/av46958874/?spm_id_from=333.334.b_63686965665f7265636f6d6d656e64.16
+  # start_url = paste0(api, str_match(urlSeed, '/av([0-9]+)/*')[1,2])
+
+  if(length(grep("\\?p=([0-9]+)", urlSeed))>0){
+    bvID = sub(".+video/(BV.*)\\?p=([0-9]+)", "\\1", urlSeed)
+    p = sub(".+video/(BV.*)\\?p=([0-9]+)", "\\2", urlSeed)
+  } else {
+    bvID = sub(".+video/(BV.*)", "\\1", urlSeed)
+    p = character()
   }
+  # bvID = sub(".+video/(BV.*)\\?p=([0-9]+)", "\\1", urlSeed)
+  # p = sub(".+video/(BV.*)\\?p=([0-9]+)", "\\2", urlSeed)
+  start_url = paste0(api, bvID)
+
+  # }
   headers = c(
     # 'Referer'= start_url,  # 注意加上referer
     'User-Agent'= 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
@@ -127,9 +152,10 @@ bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809
   video_title = gsub('[/\\?<>\\:*|": ]', "_", data[["title"]])
   cid_list = list()
 
-  if (length(grep('?p=', urlSeed)) > 0){
+  if (length(p) > 0){
+    # if (length(grep('?p=', urlSeed)) > 0){
     # 单独下载分P视频中的一集
-    p = str_match(urlSeed,  '\\?p=([0-9]+)')[1,2]
+    # p = str_match(urlSeed,  '\\?p=([0-9]+)')[1,2]
     cid_list = c(cid_list, list(data[['pages']][[as.integer(p)]]))
   } else{
     # 如果p不存在就是全集下载
@@ -171,15 +197,16 @@ bilibiliDownload = function(urlSeed = "https://www.bilibili.com/video/av30300809
 #' @export
 #' @examples {
 #' \dontrun{
-#' bilibiliListTable("https://www.bilibili.com/video/av30300809/?p=40")
+#' urlSeed = "https://www.bilibili.com/video/BV1kb411x7KZ"
+#' bilibiliListTable(urlSeed)
 #'
-#' bilibiliListTable(urlSeed = "https://www.bilibili.com/video/av30300809",
-#'                   path = "./python数据分析与机器学习",
+#' bilibiliListTable(urlSeed = urlSeed,
+#'                   path = "./小学二年级数学上册【杨老师54讲】",
 #'                   addOrder = TRUE)
 #'
 #' }
 #' }
-bilibiliListTable = function(urlSeed = "https://www.bilibili.com/video/av29663946/?p=2",
+bilibiliListTable = function(urlSeed,
                              path = "./bilibili_video/",
                              saveFileList = TRUE,
                              addOrder = FALSE){

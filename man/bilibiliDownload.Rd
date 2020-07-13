@@ -4,10 +4,13 @@
 \alias{bilibiliDownload}
 \title{Download (a list of ) Bilibili videos by providing a url seed.}
 \usage{
-
-  bilibiliDownload(urlSeed = "https://www.bilibili.com/video/av30300809/?p=40",
+bilibiliDownload(
+  urlSeed = urlSeed,
   quality = c(p720p = 64, p360p = 16, p480p = 32, p1080p = 80)[1],
-  path = "./bilibili_video/", removeSource = FALSE)
+  path = "./bilibili_video/",
+  removeSource = FALSE,
+  sleepTime = 5
+)
 }
 \arguments{
 \item{urlSeed}{a url string.}
@@ -19,18 +22,22 @@
 \item{removeSource}{logic, whether to remove the source video after concatenate the source videos.}
 }
 \description{
-Download (a list of ) Bilibili videos by providing a url seed.
+Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \br
+The API to get AV ID by BV ID:
+https://api.bilibili.com/x/web-interface/view?bvid=BVID
 }
 \examples{
 {
 \dontrun{
 # Download a single video if there is "/?p=num" in the urlSeed.
-bilibiliDownload("https://www.bilibili.com/video/av30300809/?p=40")
+urlSeed = "https://www.bilibili.com/video/BV1kb411x7KZ?p=1"
+bilibiliDownload(urlSeed)
 
-# Download a list of videos if there is no "/?p=num" in the urlSeed.
-bilibiliDownload(urlSeed = "https://www.bilibili.com/video/av30300809",
+# Download a list of videos if there is no "/]?p=num" in the urlSeed.
+urlSeed = "https://www.bilibili.com/video/BV1kb411x7KZ"
+bilibiliDownload(urlSeed = urlSeed,
                  quality = 32,
-                 path = "./python数据分析与机器学习",
+                 path = "./小学二年级数学上册【杨老师54讲】",
                  removeSource = TRUE)
 
 }
