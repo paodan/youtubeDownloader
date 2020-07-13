@@ -90,7 +90,7 @@ down_video = function(video_list, title, start_url, page, path, removeSource){
 
 #' Download (a list of ) Bilibili videos by providing a url seed.
 #'
-#' Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \br
+#' Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \cr
 #' The API to get AV ID by BV ID:
 #' https://api.bilibili.com/x/web-interface/view?bvid=BVID
 #'

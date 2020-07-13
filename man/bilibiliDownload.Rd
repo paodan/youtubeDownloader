@@ -22,7 +22,7 @@ bilibiliDownload(
 \item{removeSource}{logic, whether to remove the source video after concatenate the source videos.}
 }
 \description{
-Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \br
+Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \cr
 The API to get AV ID by BV ID:
 https://api.bilibili.com/x/web-interface/view?bvid=BVID
 }
