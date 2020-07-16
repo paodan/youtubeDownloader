@@ -8,7 +8,7 @@ bilibiliConcat = function(fileFormat = "flv",
                           removeSource = FALSE){
 
   listFile = paste0(normalizePath(path), "/videoList.txt")
-  output = paste0(path, "/../", basename(normalizePath(path)), ".", fileFormat)
+  output = paste0(path, "/../", makeFilenames(basename(normalizePath(path))), ".", fileFormat)
   write.table(paste0("file '", dir(path, pattern = paste0("*\\.", fileFormat, "$"), full.names = F), "'"),
               file = listFile, quote = F, row.names = F, col.names = F)
   if (file.exists(output)){
