@@ -52,6 +52,7 @@
 #' head(fileTable)
 #' }
 #' }
+#' @import V8
 videoListTable = function(urlSeed,
                           path = "./",
                           saveFileList = TRUE,
@@ -61,43 +62,38 @@ videoListTable = function(urlSeed,
                           bothVideoAudio = TRUE) {
   # copyright: Weiyang Tao 2017-11-02
   urlpage = readLines(urlSeed, warn = FALSE)
-  ##### File names with orders
-  # the line containing titles
-  titleLine = grep("data-video-title=",
-                   urlpage,
-                   perl = FALSE,
-                   value = TRUE)
-  titleLine = gsub("&#39;", replacement = "\'", titleLine) # replace '
-  titleLine = gsub("&quot;", replacement = "", titleLine) # replace "
-  titleLine = gsub("\" ", replacement = "\"&", titleLine) # replace "
-  titleLine = gsub("&amp;", replacement = "and", titleLine) # replace &
-  # add ?a="a"& for param_get function to recognize.
-  # ?a="a"& must be this format: ?text="text"&
-  titleLine = paste0('?a="a"&', titleLine)
+  id = intersect(grep("ytInitialData", urlpage),
+                 grep("twoColumnWatchNextResults", urlpage))
+  if (length(id) > 1) {
+    stop("Too many lines of ytInitialData are found.")
+  } else if (length(id) < 1) {
+    stop("No ytInitialData is found.")
+  } else {
+    theLine = urlpage[id]
+  }
 
-  tiOr = param_get(
-    titleLine,
-    parameter_names = c(
-      "data-video-title",
-      "data-index",
-      "data-innertube-clicktracking",
-      "data-video-username",
-      "data-video-id",
-      "data-thumbnail-url"
-    )
-  )
-  # remove initial " and ending " and ending ">
-  tiOr = apply(tiOr, 2, function(x)
-    gsub("(^\")|(\"$)|(\">$)", "", x))
-  titles = tiOr[, 1]
-  # orders
-  orders = tiOr[, 2]
+  pl = "let res = window.ytInitialData.contents.twoColumnWatchNextResults"
+  rv = "let rv = res.playlist.playlist.contents"
+  jsGetTitleURL = {
+    'var title = []; var url = [];
+     for(let mi of rv){
+     vr = mi.playlistPanelVideoRenderer;
+     title.push(vr.title.simpleText);
+     url.push(vr.navigationEndpoint.commandMetadata.webCommandMetadata.url);
+    }'
+  }
+
+  js = v8()
+  js$eval(c("let window = {};", theLine, pl, rv, jsGetTitleURL))
+
+  titles = js$get("title")
+  urls = paste0('https://www.youtube.com', js$get("url"))
   num = length(titles)
+  orders = 1:num
   nameID = formatC(1:num, width = as.integer(log10(num) + 1), flag = "0")
   tmp = sapply(1:num, function(ti) {
-    make.names(paste0(nameID[ti], titles[ti], collapse = ""),
-               unique = FALSE,
-               allow_ = TRUE)
+    makeFilenames(paste(nameID[ti], titles[ti], sep = "_", collapse = ""),
+                  allow.space = FALSE)
   })
   orderTitle = data.frame(
     Orders = orders,
@@ -105,50 +101,14 @@ videoListTable = function(urlSeed,
     fileName = tmp,
     stringsAsFactors = FALSE
   )
-  # the line containing ture url
-  id = grep(
-    "<a href=\"\\/watch\\?v=.*&amp;index",
-    urlpage,
-    perl = FALSE,
-    value = TRUE
-  )
-  if (length(id) == 0) {
-    fileConn <- file("wrongPage.html")
-    writeLines(urlpage, fileConn)
-    close(fileConn)
-    print(paste0("please go to ", getwd(), "/wrongPage.html"))
-    stop("loading page failed, please rerun")
-  } else {
-    id2 = strsplit2(id, "=")
-    v = strsplit2(id2[, 3], "\\&")[, 1] # v=
-    index = strsplit2(id2[, 4], "\\&")[, 1] # index=
-    list0 = param_get(urlSeed, parameter_names = "list") # list=
-    orderTitle$URL = paste0('https://www.youtube.com/watch?v=',
-                            v,
-                            "&list=",
-                            list0,
-                            "&index=",
-                            index) # generate url
-    foldID = grep(
-      paste0(
-        "\\/playlist\\?list=",
-        list0,
-        "\" class=\" yt-uix-sessionlink      spf-link "
-      ),
-      urlpage,
-      perl = TRUE,
-      value = TRUE
-    )
-    folderName = substr(foldID,
-                        regexpr("\" >", foldID) + 3,
-                        regexpr("<\\/a>", foldID) - 1)
-    folderName = file.path(path, make.names(folderName))
-    cat("Table file is saved in: ", folderName, "\n")
-    if (!dir.exists(folderName))
-      dir.create(folderName, recursive = TRUE)
-    # save file name and URLs
-    if (saveFileList)
-      write.csv(orderTitle, paste0(folderName, "/fileNameOrders.csv"))
-    return(list(fileTable = orderTitle, folderName = folderName))
-  }
+
+  folderName = js$get("res.playlist.playlist.title")
+  folderName = file.path(path, makeFilenames(folderName, allow.space = FALSE))
+  cat("Table file is saved in: ", folderName, "\n")
+  if (!dir.exists(folderName))
+    dir.create(folderName, recursive = TRUE)
+  # save file name and URLs
+  if (saveFileList)
+    write.csv(orderTitle, paste0(folderName, "/fileNameOrders.csv"))
+  return(list(fileTable = orderTitle, folderName = folderName))
 }
