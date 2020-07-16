@@ -10,7 +10,8 @@ bilibiliDownload(
   path = "./bilibili_video/",
   removeSource = FALSE,
   sleepTime = 5,
-  method
+  method,
+  ...
 )
 }
 \arguments{

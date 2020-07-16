@@ -25,6 +25,7 @@
 #' @importFrom limma strsplit2
 #' @import urltools
 #' @import stringr
+#' @import V8
 #' @export
 #' @examples {
 #' \dontrun{

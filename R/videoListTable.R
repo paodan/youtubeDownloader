@@ -99,6 +99,7 @@ videoListTable = function(urlSeed,
     Orders = orders,
     VideoTitles = titles,
     fileName = tmp,
+    URL = urls,
     stringsAsFactors = FALSE
   )
 

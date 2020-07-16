@@ -194,7 +194,7 @@ bilibiliDownload = function(urlSeed = urlSeed,
 #' @param path the path to save video/audio files.
 #' @param saveFileList logic, whether save the file table.
 #' @param addOrder logic, whether add a formated number to the videoTitles, default is FALSE.
-#' @import httr
+# @importFrom  httr
 #' @importFrom limma strsplit2
 #' @import stringr
 #' @export
