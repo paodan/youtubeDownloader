@@ -22,6 +22,12 @@ bilibiliDownload(
 \item{path}{the path to save the list of videos.}
 
 \item{removeSource}{logic, whether to remove the source video after concatenate the source videos.}
+
+\item{method}{Method to be used for downloading files.
+Current download methods are "internal", "wininet" (Windows only) "libcurl",
+"wget" and "curl", and there is a value "auto".
+The method can also be set through the option "download.file.method":
+see options().}
 }
 \description{
 Bilibili API collection: https://www.bilibili.com/read/cv3430609/ \cr
