@@ -66,17 +66,21 @@ videoListDownloadByTable = function(fileList,
   id = id[id %in% (1:nrow(orderTitle))]
   # download videos
   for (ui in id) {
-    url_ui = orderTitle[ui, 4]
-    print(url_ui)
-    file_ui = orderTitle[ui, 3]
-    youTubeDownload(
-      url = url_ui,
-      path = path,
-      saveFile = file_ui,
-      priority = priority,
-      bothVideoAudio = bothVideoAudio
-    )
-    Sys.sleep(abs(rnorm(1, sleepTime, 5)))
+    if(orderTitle[ui, 2] != "Private_Video"){
+      url_ui = orderTitle[ui, 4]
+      print(url_ui)
+      file_ui = orderTitle[ui, 3]
+      youTubeDownload(
+        url = url_ui,
+        path = path,
+        saveFile = file_ui,
+        priority = priority,
+        bothVideoAudio = bothVideoAudio
+      )
+      Sys.sleep(abs(rnorm(1, sleepTime, 5)))
+    } else {
+      cat("Private video:\n", id, " :", orderTitle[ui, 3])
+    }
   }
   print("All Done!")
   return(path)

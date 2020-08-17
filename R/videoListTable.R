@@ -77,9 +77,13 @@ videoListTable = function(urlSeed,
   jsGetTitleURL = {
     'var title = []; var url = [];
      for(let mi of rv){
-     vr = mi.playlistPanelVideoRenderer;
-     title.push(vr.title.simpleText);
-     url.push(vr.navigationEndpoint.commandMetadata.webCommandMetadata.url);
+         vr = mi.playlistPanelVideoRenderer;
+         if(vr.title == undefined){
+             title.push("Private_Video");
+         } else {
+             title.push(vr.title.simpleText);
+         }
+         url.push(vr.navigationEndpoint.commandMetadata.webCommandMetadata.url);
     }'
   }
 
