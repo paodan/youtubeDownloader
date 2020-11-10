@@ -27,6 +27,9 @@
 #'                 priority = "audio only",
 #'                 bothVideoAudio = FALSE)
 #'
+#' # convert to mp3 format.
+#' audio2mp3(path = "./music/")
+#'
 #' # Downlad a video
 #' url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
 #' youTubeDownload(url0, path = "./OneVideo",
@@ -66,7 +69,8 @@ youTubeDownload = function(url,
         x[x != ""][1:7]))
       if (mi == " audio only ") {
         # find the audeo with the best quality
-        highestResIndx = order(as.integer(strsplit2(text0[, 7], "k")[, 1]), decreasing = T)[1]
+        # highestResIndx = order(as.integer(strsplit2(text0[, 7], "k")[, 1]), decreasing = T)[1]
+        highestResIndx = order(as.integer(strsplit2(text0[, 6], "k")[, 1]), decreasing = T)[1]
       } else {
         # find the video with the best resolution
         highestResIndx = order(as.integer(strsplit2(text0[, 3], "x")[, 1]), decreasing = T)[1]

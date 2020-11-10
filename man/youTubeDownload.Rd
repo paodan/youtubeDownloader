@@ -46,6 +46,9 @@ youTubeDownload(url0, path = "./music",
                 priority = "audio only",
                 bothVideoAudio = FALSE)
 
+# convert to mp3 format.
+audio2mp3(path = "./music/")
+
 # Downlad a video
 url0 = "https://www.youtube.com/watch?v=pJON0-e_I3o&t=889s"
 youTubeDownload(url0, path = "./OneVideo",
